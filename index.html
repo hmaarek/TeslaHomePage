@@ -1,21 +1,50 @@
+/* Page 2: Main Page with Digital Clock and YouTube Player (main.html) */
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tesla Home App</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Page</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #282c34;
+      color: white;
+    }
+    #clock {
+      font-size: 5rem;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
+  <h1>Digital Clock and YouTube Player</h1>
+  <nav>
+    <a href="saveurl.html">Save Videos</a> | <a href="retrieve.html">View Saved Videos</a>
+  </nav>
   <div id="clock"></div>
-  <iframe width="560" height="315" 
-          src="https://www.youtube.com/embed/KjScRo3UrQ4?si=mE8OMP1CIs9VFO05" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-  </iframe>
-  <script src="script.js"></script>
+  <iframe id="youtubePlayer" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <script>
+    // Digital Clock
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // YouTube Player
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('v') || 'dQw4w9WgXcQ'; // Default video ID
+    document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}`;
+  </script>
 </body>
 </html>
-
-<!-- src="https://www.youtube.com/embed/dQw4w9WgXcQ"  -->
