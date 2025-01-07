@@ -21,7 +21,7 @@
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
       const input = document.getElementById('videoUrl');
-      if (!input.value.includes('youtube.com/watch?v=')) {
+      if (!input.value.includes('youtube.com/')) {
         e.preventDefault();
         alert('Please enter a valid YouTube URL!');
       }
