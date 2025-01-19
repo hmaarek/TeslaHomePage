@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +20,7 @@
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
       const input = document.getElementById('videoUrl');
-      if (!input.value.includes('youtube.com/')) {
+      if (!input.value.includes('youtube.com/watch?v=')) {
         e.preventDefault();
         alert('Please enter a valid YouTube URL!');
       }
