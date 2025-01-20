@@ -1,34 +1,31 @@
-//import fetch from 'node-fetch';
-//const fetch = require('node-fetch');
-
-const fetch = globalThis.fetch;
-
-
 export const handler = async () => {
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
 
   try {
-    console.log('Starting Netlify Function...');
-    
-    // Fetch forms from Netlify
-    const response = await fetch(`https://api.netlify.com/api/v1/forms`, {
+    console.log('Fetching forms...');
+    const response = await fetch('https://api.netlify.com/api/v1/forms', {
       headers: {
         Authorization: `Bearer ${NETLIFY_AUTH_TOKEN}`,
       },
     });
 
+    // Log raw response for debugging
+    const rawText = await response.text();
+    console.log('Raw Response:', rawText);
+
     if (!response.ok) {
-      console.error('Failed to fetch forms:', await response.text());
+      console.error('Failed to fetch forms:', rawText);
       return {
         statusCode: response.status,
         body: JSON.stringify({ error: 'Failed to fetch forms' }),
       };
     }
 
-    const forms = await response.json();
-    console.log('Fetched forms:', forms);
+    // Parse the response JSON if successful
+    const forms = JSON.parse(rawText);
+    console.log('Forms fetched:', forms);
 
-    // Find the "video-form"
+    // Find the form named "video-form"
     const videoForm = forms.find(form => form.name === 'video-form');
     if (!videoForm) {
       console.error('Form not found');
@@ -38,7 +35,7 @@ export const handler = async () => {
       };
     }
 
-    // Fetch submissions
+    console.log('Fetching submissions...');
     const submissionsResponse = await fetch(
       `https://api.netlify.com/api/v1/forms/${videoForm.id}/submissions`,
       {
@@ -48,18 +45,20 @@ export const handler = async () => {
       }
     );
 
+    const submissionsRaw = await submissionsResponse.text();
+    console.log('Submissions Raw Response:', submissionsRaw);
+
     if (!submissionsResponse.ok) {
-      console.error('Failed to fetch submissions:', await submissionsResponse.text());
+      console.error('Failed to fetch submissions:', submissionsRaw);
       return {
         statusCode: submissionsResponse.status,
         body: JSON.stringify({ error: 'Failed to fetch submissions' }),
       };
     }
 
-    const submissions = await submissionsResponse.json();
-    console.log('Fetched submissions:', submissions);
+    const submissions = JSON.parse(submissionsRaw);
+    console.log('Submissions fetched:', submissions);
 
-    // Return submissions
     return {
       statusCode: 200,
       body: JSON.stringify(submissions),
