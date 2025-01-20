@@ -1,4 +1,8 @@
 export const handler = async () => {
+
+// Debugging: Check if the token is available
+console.log('Auth Token Available:', !!process.env.NETLIFY_AUTH_TOKEN);
+
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
 
   try {
