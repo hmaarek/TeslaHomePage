@@ -5,13 +5,19 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "netlify dev", 
+    "start": "netlify dev",
     "build": "echo \"No build step defined.\""
   },
-  "dependencies": {
-    "node-fetch": "^3.3.1"
-  },
-  "keywords": ["netlify", "forms", "serverless", "youtube", "tesla"],
+  "keywords": [
+    "netlify",
+    "forms",
+    "serverless",
+    "youtube",
+    "tesla"
+  ],
   "author": "Your Name",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
 }

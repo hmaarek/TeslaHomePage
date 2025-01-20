@@ -1,4 +1,5 @@
-import fetch from 'node-fetch';
+//import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
 export const handler = async () => {
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
