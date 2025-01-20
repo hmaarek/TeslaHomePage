@@ -1,29 +1,40 @@
-//const fetch = require('node-fetch');
 import fetch from 'node-fetch';
 
-exports.handler = async () => {
+export const handler = async () => {
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
 
   try {
-    // Fetch all forms from Netlify
+    console.log('Starting Netlify Function...');
+    
+    // Fetch forms from Netlify
     const response = await fetch(`https://api.netlify.com/api/v1/forms`, {
       headers: {
         Authorization: `Bearer ${NETLIFY_AUTH_TOKEN}`,
       },
     });
 
-    const forms = await response.json();
+    if (!response.ok) {
+      console.error('Failed to fetch forms:', await response.text());
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ error: 'Failed to fetch forms' }),
+      };
+    }
 
-    // Find the form named "video-form"
+    const forms = await response.json();
+    console.log('Fetched forms:', forms);
+
+    // Find the "video-form"
     const videoForm = forms.find(form => form.name === 'video-form');
     if (!videoForm) {
+      console.error('Form not found');
       return {
         statusCode: 404,
         body: JSON.stringify({ error: 'Form not found' }),
       };
     }
 
-    // Fetch submissions for the form
+    // Fetch submissions
     const submissionsResponse = await fetch(
       `https://api.netlify.com/api/v1/forms/${videoForm.id}/submissions`,
       {
@@ -32,18 +43,28 @@ exports.handler = async () => {
         },
       }
     );
-    const submissions = await submissionsResponse.json();
 
-    // Return the submissions as JSON
+    if (!submissionsResponse.ok) {
+      console.error('Failed to fetch submissions:', await submissionsResponse.text());
+      return {
+        statusCode: submissionsResponse.status,
+        body: JSON.stringify({ error: 'Failed to fetch submissions' }),
+      };
+    }
+
+    const submissions = await submissionsResponse.json();
+    console.log('Fetched submissions:', submissions);
+
+    // Return submissions
     return {
       statusCode: 200,
       body: JSON.stringify(submissions),
     };
   } catch (error) {
-    console.error('Error fetching submissions:', error);
+    console.error('Uncaught error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch submissions' }),
+      body: JSON.stringify({ error: 'Internal Server Error' }),
     };
   }
 };
