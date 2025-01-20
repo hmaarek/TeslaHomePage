@@ -12,15 +12,39 @@
   </nav>
   <ul id="videoList"></ul>
   <script>
+    //original version of fetch function-----------------------------------------
+    // fetch('/.netlify/functions/get-submissions')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     const videoList = document.getElementById('videoList');
+    //     data.forEach(submission => {
+    //       videoList.innerHTML += `<li><a href='index.html?v=${submission.data.videoUrl}'>${submission.data.videoUrl}</a></li>`;
+    //     });
+    //   })
+    //   .catch(err => console.error('Error fetching submissions:', err));
+    //--------------------------------------------------------------------------
+
+    //debug version of fetch by GPT
     fetch('/.netlify/functions/get-submissions')
-      .then(response => response.json())
-      .then(data => {
-        const videoList = document.getElementById('videoList');
-        data.forEach(submission => {
-          videoList.innerHTML += `<li><a href='index.html?v=${submission.data.videoUrl}'>${submission.data.videoUrl}</a></li>`;
-        });
-      })
-      .catch(err => console.error('Error fetching submissions:', err));
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Response Data:', data); // Log the raw response
+    const videoList = document.getElementById('videoList');
+    if (Array.isArray(data)) {
+      data.forEach(submission => {
+        videoList.innerHTML += `<li><a href="index.html?v=${submission.data.videoUrl}">${submission.data.videoUrl}</a></li>`;
+      });
+    } else {
+      videoList.innerHTML = '<li>No submissions found or invalid data format.</li>';
+    }
+  })
+  .catch(err => console.error('Error fetching submissions:', err));
+
   </script>
 </body>
 </html>
