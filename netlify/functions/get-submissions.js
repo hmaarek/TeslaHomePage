@@ -5,6 +5,8 @@ console.log('Auth Token Available:', !!process.env.NETLIFY_AUTH_TOKEN);
 
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
 
+console.log('Auth Token:', NETLIFY_AUTH_TOKEN);
+
   try {
     console.log('Fetching forms...');
     const response = await fetch('https://api.netlify.com/api/v1/forms', {
