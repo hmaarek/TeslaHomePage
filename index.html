@@ -44,7 +44,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('v') || 'dQw4w9WgXcQ'; // Default video ID
     //document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}`;
-    document.getElementById('youtubePlayer').src = `${videoId}`;
+    document.getElementById('youtubePlayer').src = `${videoId}?autoplay=1`;
   </script>
 </body>
 </html>
