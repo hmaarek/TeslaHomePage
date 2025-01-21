@@ -17,7 +17,7 @@ export const handler = async () => {
     });
 
     // Log raw response for debugging
-    //const rawText = await response.text();
+    const rawText = await response.text();
     //console.log('Raw Response:', rawText);
 
     if (!response.ok) {
