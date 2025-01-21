@@ -19,13 +19,41 @@
       font-size: 5rem;
       margin-bottom: 20px;
     }
+    .button-group {
+      display: flex;
+      justify-content: center; /* Center buttons horizontally */
+      margin: 20px 0; /* Add some spacing around the group */
+      gap: 50px; /* Add gap between buttons */
+    }
+
+    .btn {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease; /* Smooth color transition */
+    }
+
+    .btn-primary {
+      background-color: #007bff; /* Blue */
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0062cc; /* Darker blue on hover */
+    }
   </style>
 </head>
 <body>
   <h1>Digital Clock and YouTube Player</h1>
-  <nav>
+  <!-- <nav>
     <a href="save.html">Save Videos</a> | <a href="retrieve.html">View Saved Videos</a>
-  </nav>
+  </nav> -->
+  <div class="button-group">
+    <button class="btn btn-primary" onclick="location.href='save.html'">Save Videos</button>
+    <button class="btn btn-primary" onclick="location.href='retrieve.html'">View Saved Videos</button>
+  </div>
   <div id="clock"></div>
   <iframe id="youtubePlayer" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   <script>
