@@ -43,6 +43,7 @@
     // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
     const urlParams = new URLSearchParams(window.location.search);
     const ytPath = urlParams.get('v='); // || 'dQw4w9WgXcQ'; // Default video ID
+    console.log("ytPath= ", ytPath);
     const videoId = getYouTubeVideoId(ytPath);
     console.log('Video ID: ', videoId);
     document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
