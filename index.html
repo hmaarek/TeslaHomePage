@@ -42,7 +42,7 @@
 
     // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
     const urlParams = new URLSearchParams(window.location.search);
-    const ytPath = urlParams.get('v='); // || 'dQw4w9WgXcQ'; // Default video ID
+    const ytPath = urlParams.get('v'); // || 'dQw4w9WgXcQ'; // Default video ID
     console.log("ytPath= ", ytPath);
     const videoId = getYouTubeVideoId(ytPath);
     console.log('Video ID: ', videoId);
