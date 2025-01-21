@@ -63,7 +63,7 @@ export const handler = async () => {
       };
     }
 
-    //const submissions = JSON.parse(submissionsRaw);
+    const submissions = JSON.parse(submissionsRaw);
     //console.log('Submissions fetched:', submissions);
 
     return {
