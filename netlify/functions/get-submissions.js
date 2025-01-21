@@ -52,7 +52,7 @@ export const handler = async () => {
       }
     );
 
-    //const submissionsRaw = await submissionsResponse.text();
+    const submissionsRaw = await submissionsResponse.text();
     //console.log('Submissions Raw Response:', submissionsRaw);
 
     if (!submissionsResponse.ok) {
