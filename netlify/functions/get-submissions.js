@@ -8,7 +8,7 @@ export const handler = async () => {
 //console.log('Auth Token:', NETLIFY_AUTH_TOKEN);
 
   try {
-    console.log('Fetching forms...');
+//    console.log('Fetching forms...');
     //const response = await fetch('https://api.netlify.com/api/v1/forms', {
     const response = await fetch('https://api.netlify.com/api/v1/sites/aafb893c-fa27-4d61-b09c-b6a8301dbcd1/forms', {
       headers: {
@@ -17,8 +17,8 @@ export const handler = async () => {
     });
 
     // Log raw response for debugging
-    const rawText = await response.text();
-    console.log('Raw Response:', rawText);
+    //const rawText = await response.text();
+    //console.log('Raw Response:', rawText);
 
     if (!response.ok) {
       console.error('Failed to fetch forms:', rawText);
@@ -30,7 +30,7 @@ export const handler = async () => {
 
     // Parse the response JSON if successful
     const forms = JSON.parse(rawText);
-    console.log('Forms fetched:', forms);
+    //console.log('Forms fetched:', forms);
 
     // Find the form named "video-form"
     const videoForm = forms.find(form => form.name === 'video-form');
@@ -42,7 +42,7 @@ export const handler = async () => {
       };
     }
 
-    console.log('Fetching submissions...');
+    //console.log('Fetching submissions...');
     const submissionsResponse = await fetch(
       `https://api.netlify.com/api/v1/forms/${videoForm.id}/submissions`,
       {
@@ -52,8 +52,8 @@ export const handler = async () => {
       }
     );
 
-    const submissionsRaw = await submissionsResponse.text();
-    console.log('Submissions Raw Response:', submissionsRaw);
+    //const submissionsRaw = await submissionsResponse.text();
+    //console.log('Submissions Raw Response:', submissionsRaw);
 
     if (!submissionsResponse.ok) {
       console.error('Failed to fetch submissions:', submissionsRaw);
@@ -63,8 +63,8 @@ export const handler = async () => {
       };
     }
 
-    const submissions = JSON.parse(submissionsRaw);
-    console.log('Submissions fetched:', submissions);
+    //const submissions = JSON.parse(submissionsRaw);
+    //console.log('Submissions fetched:', submissions);
 
     return {
       statusCode: 200,
