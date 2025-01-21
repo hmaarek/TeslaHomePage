@@ -42,10 +42,26 @@
 
     // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
     const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('v') || 'dQw4w9WgXcQ'; // Default video ID
+    //const videoId = urlParams.get('v=') || 'dQw4w9WgXcQ'; // Default video ID
+    const videoId = getYouTubeVideoId(urlParams);
     console.log('Video ID: ', videoId);
     document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
     //document.getElementById('youtubePlayer').src = `${videoId}?autoplay=1`;
+
+
+    function getYouTubeVideoId(url) {
+  // Regular expression to match various YouTube URL formats
+  const regExp = /^.*(http:\/\/googleusercontent\.com\/youtube\.com\/2\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
+
+  const match = url.match(regExp);
+
+  if (match && match[2].length === 11) {
+    return match[2];
+  } else {
+    return null; // Return null if no valid video ID is found
+  }
+}
+
   </script>
 </body>
 </html>
