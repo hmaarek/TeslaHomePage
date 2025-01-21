@@ -42,8 +42,8 @@
 
     // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
     const urlParams = new URLSearchParams(window.location.search);
-    //const videoId = urlParams.get('v=') || 'dQw4w9WgXcQ'; // Default video ID
-    const videoId = getYouTubeVideoId(urlParams);
+    const ytPath = urlParams.get('v='); // || 'dQw4w9WgXcQ'; // Default video ID
+    const videoId = getYouTubeVideoId(ytPath);
     console.log('Video ID: ', videoId);
     document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
     //document.getElementById('youtubePlayer').src = `${videoId}?autoplay=1`;
