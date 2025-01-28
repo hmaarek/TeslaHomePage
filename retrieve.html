@@ -25,26 +25,64 @@
     //--------------------------------------------------------------------------
 
     //debug version of fetch by GPT
-    fetch('/.netlify/functions/get-submissions')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  })
+
+
+    //without video details:
+  //   const apiKey = 'AIzaSyAXgS64rJ7C4vc3HhxP-YKy5aRCoNN_iwY'
+
+  //   fetch('/.netlify/functions/get-submissions')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       return response.json();
+  //     })
+  // .then(data => {
+  //   //console.log('Response Data:', data); // Log the raw response
+  //   const videoList = document.getElementById('videoList');
+  //   if (Array.isArray(data)) {
+  //     data.forEach(submission => {
+  //       videoList.innerHTML += `<li><a href="index.html?v=${submission.data.videoUrl}">${submission.data.videoUrl}</a></li>`;
+  //     });
+  //   } else {
+  //     videoList.innerHTML = '<li>No submissions found or invalid data format.</li>';
+  //   }
+  // })
+  // .catch(err => console.error('Error fetching submissions:', err));
+
+
+  //with Video Details
+  const apiKey = 'YOUR_YOUTUBE_API_KEY'; // Replace with your API key
+
+fetch('/.netlify/functions/get-submissions')
+  .then(response => response.json())
   .then(data => {
-    //console.log('Response Data:', data); // Log the raw response
     const videoList = document.getElementById('videoList');
-    if (Array.isArray(data)) {
-      data.forEach(submission => {
-        videoList.innerHTML += `<li><a href="index.html?v=${submission.data.videoUrl}">${submission.data.videoUrl}</a></li>`;
-      });
-    } else {
-      videoList.innerHTML = '<li>No submissions found or invalid data format.</li>';
-    }
+
+    // Iterate through submissions and fetch video titles
+    data.forEach(submission => {
+      const videoUrl = submission.data.videoUrl;
+      const url = new URL(videoUrl);
+      const videoId = url.searchParams.get('v'); // Extract video ID from URL
+
+      if (videoId) {
+        // Fetch video details from YouTube Data API
+        fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`)
+          .then(res => res.json())
+          .then(videoData => {
+            const title = videoData.items[0]?.snippet?.title || 'Unknown Title';
+            videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">${title}</a></li>`;
+          })
+          .catch(err => {
+            console.error('Error fetching video details:', err);
+            videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">Unknown Title</a></li>`;
+          });
+      } else {
+        videoList.innerHTML += `<li>Invalid YouTube URL</li>`;
+      }
+    });
   })
   .catch(err => console.error('Error fetching submissions:', err));
-
-  </script>
+  // </script>
 </body>
 </html>
