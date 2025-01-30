@@ -12,7 +12,8 @@
   </nav>
   <ul id="videoList"></ul>
   <script>
-    const apiKey = 'AIzaSyCTZxPX7_MoOKj3wFmkH6ldr3y9REuL6YM'; // Replace with your API key
+    const apiKey = process.env.YOUTUBE_API_KEY; // Securely fetch from Netlify environment variables
+
   
     function extractVideoId(url) {
       try {
