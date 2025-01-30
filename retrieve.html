@@ -12,77 +12,57 @@
   </nav>
   <ul id="videoList"></ul>
   <script>
-    //original version of fetch function-----------------------------------------
-    // fetch('/.netlify/functions/get-submissions')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     const videoList = document.getElementById('videoList');
-    //     data.forEach(submission => {
-    //       videoList.innerHTML += `<li><a href='index.html?v=${submission.data.videoUrl}'>${submission.data.videoUrl}</a></li>`;
-    //     });
-    //   })
-    //   .catch(err => console.error('Error fetching submissions:', err));
-    //--------------------------------------------------------------------------
-
-    //debug version of fetch by GPT
-
-
-    //without video details:
-  //   const apiKey = 'AIzaSyAXgS64rJ7C4vc3HhxP-YKy5aRCoNN_iwY'
-
-    fetch('/.netlify/functions/get-submissions')
-      .then(response => {
-        if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    const apiKey = 'YOUR_YOUTUBE_API_KEY'; // Replace with your API key
+  
+    function extractVideoId(url) {
+      try {
+        const parsedUrl = new URL(url);
+        
+        // Handle standard YouTube URL
+        if (parsedUrl.hostname.includes('youtube.com')) {
+          return parsedUrl.searchParams.get('v') || parsedUrl.pathname.split('/').pop();
         }
-        return response.json();
-      })
-  .then(data => {
-    //console.log('Response Data:', data); // Log the raw response
-    const videoList = document.getElementById('videoList');
-    if (Array.isArray(data)) {
-      data.forEach(submission => {
-        videoList.innerHTML += `<li><a href="index.html?v=${submission.data.videoUrl}">${submission.data.videoUrl}</a></li>`;
-      });
-    } else {
-      videoList.innerHTML = '<li>No submissions found or invalid data format.</li>';
+  
+        // Handle short YouTube URLs (youtu.be)
+        if (parsedUrl.hostname.includes('youtu.be')) {
+          return parsedUrl.pathname.substring(1); // Remove the first '/'
+        }
+  
+        return null; // Invalid or unsupported URL
+      } catch (error) {
+        console.error('Error extracting video ID:', error);
+        return null;
+      }
     }
-  })
-  .catch(err => console.error('Error fetching submissions:', err));
-
-
-  //with Video Details
-//   const apiKey = 'YOUR_YOUTUBE_API_KEY'; // Replace with your API key
-
-// fetch('/.netlify/functions/get-submissions')
-//   .then(response => response.json())
-//   .then(data => {
-//     const videoList = document.getElementById('videoList');
-
-//     // Iterate through submissions and fetch video titles
-//     data.forEach(submission => {
-//       const videoUrl = submission.data.videoUrl;
-//       const url = new URL(videoUrl);
-//       const videoId = url.searchParams.get('v'); // Extract video ID from URL
-
-//       if (videoId) {
-//         // Fetch video details from YouTube Data API
-//         fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`)
-//           .then(res => res.json())
-//           .then(videoData => {
-//             const title = videoData.items[0]?.snippet?.title || 'Unknown Title';
-//             videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">${title}</a></li>`;
-//           })
-//           .catch(err => {
-//             console.error('Error fetching video details:', err);
-//             videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">Unknown Title</a></li>`;
-//           });
-//       } else {
-//         videoList.innerHTML += `<li>Invalid YouTube URL</li>`;
-//       }
-//     });
-//   })
-//   .catch(err => console.error('Error fetching submissions:', err));
-  // </script>
+  
+    fetch('/.netlify/functions/get-submissions')
+      .then(response => response.json())
+      .then(data => {
+        const videoList = document.getElementById('videoList');
+  
+        data.forEach(submission => {
+          const videoUrl = submission.data.videoUrl;
+          const videoId = extractVideoId(videoUrl);
+  
+          if (videoId) {
+            // Fetch video details from YouTube Data API
+            fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`)
+              .then(res => res.json())
+              .then(videoData => {
+                const title = videoData.items[0]?.snippet?.title || 'Unknown Title';
+                videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">${title}</a></li>`;
+              })
+              .catch(err => {
+                console.error('Error fetching video details:', err);
+                videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">Unknown Title</a></li>`;
+              });
+          } else {
+            videoList.innerHTML += `<li>Invalid YouTube URL</li>`;
+          }
+        });
+      })
+      .catch(err => console.error('Error fetching submissions:', err));
+  </script>
+  
 </body>
 </html>
