@@ -1,8 +1,13 @@
 export const handler = async (event) => {
     try {
-      const { id } = JSON.parse(event.body);
+      console.log("Received request body:", event.body);
+  
+      // Parse request body
+      const requestBody = JSON.parse(event.body);
+      const { id } = requestBody;
   
       if (!id) {
+        console.error("Missing submission ID");
         return {
           statusCode: 400,
           body: JSON.stringify({ error: "Missing submission ID" }),
@@ -10,22 +15,28 @@ export const handler = async (event) => {
       }
   
       const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
-      const siteId = process.env.MY_SITE_ID; // Ensure SITE_ID is stored in Netlify Environment Variables
+      const SITE_ID = process.env.SITE_ID; // Ensure this is set in Netlify env variables
   
-      const response = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/submissions/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${NETLIFY_AUTH_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://api.netlify.com/api/v1/sites/${SITE_ID}/submissions/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${NETLIFY_AUTH_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
   
       if (!response.ok) {
+        console.error("Failed to delete:", await response.text());
         return {
           statusCode: response.status,
           body: JSON.stringify({ error: "Failed to delete video" }),
         };
       }
+  
+      console.log(`Successfully deleted submission: ${id}`);
   
       return {
         statusCode: 200,
