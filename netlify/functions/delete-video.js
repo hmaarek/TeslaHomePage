@@ -15,7 +15,7 @@ export const handler = async (event) => {
       }
   
       const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
-      const SITE_ID = process.env.SITE_ID; // Ensure this is set in Netlify env variables
+      const SITE_ID = process.env.MY_SITE_ID; // Ensure this is set in Netlify env variables
   
       const response = await fetch(
         `https://api.netlify.com/api/v1/sites/${SITE_ID}/submissions/${id}`,
