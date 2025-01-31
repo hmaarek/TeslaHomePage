@@ -12,24 +12,19 @@
   </nav>
   <ul id="videoList"></ul>
   <script>
-    const apiKey = process.env.YOUTUBE_API_KEY; // Securely fetch from Netlify environment variables
-
-  
     function extractVideoId(url) {
       try {
         const parsedUrl = new URL(url);
-        
-        // Handle standard YouTube URL
+  
         if (parsedUrl.hostname.includes('youtube.com')) {
           return parsedUrl.searchParams.get('v') || parsedUrl.pathname.split('/').pop();
         }
   
-        // Handle short YouTube URLs (youtu.be)
         if (parsedUrl.hostname.includes('youtu.be')) {
-          return parsedUrl.pathname.substring(1); // Remove the first '/'
+          return parsedUrl.pathname.substring(1);
         }
   
-        return null; // Invalid or unsupported URL
+        return null;
       } catch (error) {
         console.error('Error extracting video ID:', error);
         return null;
@@ -46,24 +41,37 @@
           const videoId = extractVideoId(videoUrl);
   
           if (videoId) {
-            // Fetch video details from YouTube Data API
-            fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`)
+            // Call Netlify function instead of YouTube API directly
+            fetch(`/.netlify/functions/get-video-details?videoId=${videoId}`)
               .then(res => res.json())
               .then(videoData => {
                 const title = videoData.items[0]?.snippet?.title || 'Unknown Title';
-                videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">${title}</a></li>`;
+                const thumbnail = videoData.items[0]?.snippet?.thumbnails?.medium?.url || '';
+  
+                videoList.innerHTML += `
+                  <li class="video-item">
+                    <a href="index.html?video=${encodeURIComponent(videoUrl)}" class="video-link">
+                      <img src="${thumbnail}" alt="Thumbnail" class="thumbnail">
+                      <span class="video-title">${title}</span>
+                    </a>
+                  </li>`;
               })
               .catch(err => {
                 console.error('Error fetching video details:', err);
-                videoList.innerHTML += `<li><a href="index.html?video=${encodeURIComponent(videoUrl)}">Unknown Title</a></li>`;
+                videoList.innerHTML += `
+                  <li class="video-item">
+                    <a href="index.html?video=${encodeURIComponent(videoUrl)}" class="video-link">
+                      <span class="video-title">Unknown Title</span>
+                    </a>
+                  </li>`;
               });
           } else {
-            videoList.innerHTML += `<li>Invalid YouTube URL</li>`;
+            videoList.innerHTML += `<li class="video-item">Invalid YouTube URL</li>`;
           }
         });
       })
       .catch(err => console.error('Error fetching submissions:', err));
   </script>
-  
+    
 </body>
 </html>
