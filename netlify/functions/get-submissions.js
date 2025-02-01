@@ -6,7 +6,7 @@ export const handler = async () => {
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
   const SITE_ID = process.env.MY_SITE_ID; // Ensure this is set in Netlify env variables
 
-//console.log('Auth Token:', NETLIFY_AUTH_TOKEN);
+console.log('SITE ID:', SITE_ID);
 
   try {
 //    console.log('Fetching forms...');
