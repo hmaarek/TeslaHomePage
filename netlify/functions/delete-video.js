@@ -30,6 +30,7 @@ export const handler = async (event) => {
   
       if (!response.ok) {
         console.error("Failed to delete:", await response.text());
+        console.error("Fid failed: ", id);
         return {
           statusCode: response.status,
           body: JSON.stringify({ error: "Failed to delete video" }),
