@@ -4,13 +4,16 @@ export const handler = async () => {
 //console.log('Auth Token Available:', !!process.env.NETLIFY_AUTH_TOKEN);
 
   const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
+  const SITE_ID = process.env.MY_SITE_ID; // Ensure this is set in Netlify env variables
 
 //console.log('Auth Token:', NETLIFY_AUTH_TOKEN);
 
   try {
 //    console.log('Fetching forms...');
     //const response = await fetch('https://api.netlify.com/api/v1/forms', {
-    const response = await fetch('https://api.netlify.com/api/v1/sites/aafb893c-fa27-4d61-b09c-b6a8301dbcd1/forms', {
+    //const response = await fetch('https://api.netlify.com/api/v1/sites/aafb893c-fa27-4d61-b09c-b6a8301dbcd1/forms', {
+    const response = await fetch(`https://api.netlify.com/api/v1/sites/${SITE_ID}/forms`,{
+  
       headers: {
         Authorization: `Bearer ${NETLIFY_AUTH_TOKEN}`,
       },
