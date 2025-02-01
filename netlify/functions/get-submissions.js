@@ -12,7 +12,7 @@ console.log('SITE ID:', SITE_ID);
 //    console.log('Fetching forms...');
     //const response = await fetch('https://api.netlify.com/api/v1/forms', {
     //const response = await fetch('https://api.netlify.com/api/v1/sites/aafb893c-fa27-4d61-b09c-b6a8301dbcd1/forms', {
-    const response = await fetch(`https://api.netlify.com/api/v1/sites/${SITE_ID}/forms`,{
+    const response = await fetch(`https://api.netlify.com/sites/${SITE_ID}/forms`,{
   
       headers: {
         Authorization: `Bearer ${NETLIFY_AUTH_TOKEN}`,
