@@ -33,26 +33,26 @@
     }
   
     function deleteVideo(submissionId) {
-      if (!confirm("Are you sure you want to delete this video?")) {
-        return;
-      }
-  
-      fetch(`/.netlify/functions/delete-video`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: submissionId })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert("Video deleted successfully!");
-          location.reload(); // Refresh the list
-        } else {
-          alert("Error deleting video.");
-        }
-      })
-      .catch(err => console.error('Error deleting video:', err));
+    if (!confirm("Are you sure you want to delete this video? id:")) {
+      return;
     }
+
+    fetch(`/.netlify/functions/delete-video`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: submissionId }) // Ensure correct JSON formatting
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert("Video deleted successfully!");
+        location.reload(); // Refresh the list
+      } else {
+        alert("Error deleting video.");
+      }
+    })
+    .catch(err => console.error('Error deleting video:', err));
+  }
   
     fetch('/.netlify/functions/get-submissions')
       .then(response => response.json())
@@ -75,7 +75,7 @@
                   <li class="video-item">
                     <a href="index.html?video=${encodeURIComponent(videoUrl)}" class="video-link">
                       <img src="${thumbnail}" alt="Thumbnail" class="thumbnail">
-                      <span class="video-title">${title}</span>
+                      <span class="video-title">${title}  ${submissionId} </span>
                     </a>
                     <button class="delete-btn" onclick="deleteVideo('${submissionId}')">❌ Delete</button>
                   </li>`;
