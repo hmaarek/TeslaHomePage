@@ -3,61 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Main Page</title>
+  <title>Digital Clock & YouTube Player</title>
   <style>
+    /* General Page Styling */
     body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      font-family: Arial, sans-serif;
-      background-color: #4b515e;
-      color: white;
     }
-    #clock {
-      font-size: 5rem;
+
+    h1 {
+      font-size: 28px;
       margin-bottom: 20px;
     }
-    .button-group {
-      display: flex;
-      justify-content: center; /* Center buttons horizontally */
-      margin: 20px 0; /* Add some spacing around the group */
-      gap: 50px; /* Add gap between buttons */
+
+    /* Digital Clock Styling */
+    #clock {
+      font-size: 5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: #1e1e1e;
+      box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
     }
 
-    .btn {
-      padding: 15px 30px;
+    /* YouTube Player Styling */
+    #videoContainer {
+      width: 80%;
+      max-width: 800px;
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border-radius: 10px;
+    }
+
+    /* Navigation Links */
+    .nav-links {
+      margin-top: 20px;
+    }
+
+    .nav-links a {
+      color: #ffcc00;
+      text-decoration: none;
+      margin: 0 10px;
       font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease; /* Smooth color transition */
     }
 
-    .btn-primary {
-      background-color: #007bff; /* Blue */
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background-color: #0062cc; /* Darker blue on hover */
+    .nav-links a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>Digital Clock and YouTube Player</h1>
-  <!-- <nav>
-    <a href="save.html">Save Videos</a> | <a href="retrieve.html">View Saved Videos</a>
-  </nav> -->
-  <div class="button-group">
-    <button class="btn btn-primary" onclick="location.href='save.html'">Save Videos</button>
-    <button class="btn btn-primary" onclick="location.href='retrieve.html'">View Saved Videos</button>
+  <h1>Digital Clock & YouTube Player</h1>
+
+  <!-- Digital Clock Display -->
+  <div id="clock">00:00:00</div>
+
+  <!-- YouTube Video Player -->
+  <div id="videoContainer">
+    <iframe id="youtubePlayer" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
   </div>
-  <div id="clock"></div>
-  <iframe id="youtubePlayer" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+  <!-- Navigation Links -->
+  <div class="nav-links">
+    <a href="save.html">Save Videos</a> | <a href="retrieve.html">View Saved Videos</a>
+  </div>
+
   <script>
-    // Digital Clock
+    // Digital Clock Function
     function updateClock() {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
@@ -68,65 +100,40 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const ytPath = urlParams.get('v'); // || 'dQw4w9WgXcQ'; // Default video ID
-    // console.log("ytPath= ", ytPath);
-    // const videoId = getYouTubeVideoId(ytPath);
-    // console.log('Video ID: ', videoId);
-    // document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
-    // //document.getElementById('youtubePlayer').src = `${videoId}?autoplay=1`;
-
-
-//     function getYouTubeVideoId(url) {
-//   // Regular expression to match various YouTube URL formats
-//   const regExp = /^.*(http:\/\/googleusercontent\.com\/youtube\.com\/2\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
-
-//   const match = url.match(regExp);
-
-//   if (match && match[2].length === 11) {
-//     return match[2];
-//   } else {
-//     return null; // Return null if no valid video ID is found
-//   }
-// }
-
-function extractVideoId(url) {
-    try {
-      const parsedUrl = new URL(url);
-      if (parsedUrl.hostname.includes('youtube.com')) {
-        return parsedUrl.searchParams.get('v') || parsedUrl.pathname.split('/').pop();
+    // Function to Extract YouTube Video ID
+    function extractVideoId(url) {
+      try {
+        const parsedUrl = new URL(url);
+        if (parsedUrl.hostname.includes('youtube.com')) {
+          return parsedUrl.searchParams.get('v') || parsedUrl.pathname.split('/').pop();
+        }
+        if (parsedUrl.hostname.includes('youtu.be')) {
+          return parsedUrl.pathname.substring(1);
+        }
+        return null;
+      } catch (error) {
+        console.error('Error extracting video ID:', error);
+        return null;
       }
-      if (parsedUrl.hostname.includes('youtu.be')) {
-        return parsedUrl.pathname.substring(1);
-      }
-      return null;
-    } catch (error) {
-      console.error('Error extracting video ID:', error);
-      return null;
     }
-  }
 
-  // Load Selected Video
-  function loadVideo() {
-    let videoUrl = localStorage.getItem("selectedVideo"); // ✅ Get stored video URL
-
-    if (videoUrl) {
-      const videoId = extractVideoId(videoUrl);
-
-      if (videoId) {
-        document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    // Load Selected Video
+    function loadVideo() {
+      let videoUrl = localStorage.getItem("selectedVideo");
+      if (videoUrl) {
+        const videoId = extractVideoId(videoUrl);
+        if (videoId) {
+          document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        } else {
+          document.getElementById('videoContainer').innerHTML = '<p>Invalid video URL. Please select a valid video.</p>';
+        }
       } else {
-        document.getElementById('videoContainer').innerHTML = '<p>Invalid video URL. Please select a valid video.</p>';
+        document.getElementById('videoContainer').innerHTML = '<p>No video selected. Please choose a video from the list.</p>';
       }
-    } else {
-      document.getElementById('videoContainer').innerHTML = '<p>No video selected. Please choose a video from the list.</p>';
     }
-  }
 
-  // Load the video when the page loads
-  window.onload = loadVideo;
-
+    // Load the video when the page loads
+    window.onload = loadVideo;
   </script>
 </body>
 </html>
