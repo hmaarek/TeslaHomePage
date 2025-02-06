@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -24,6 +24,151 @@
       //   e.preventDefault();
       //   alert('Please enter a valid YouTube URL!');
       // }
+    });
+  </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Save YouTube Videos</title>
+  <style>
+    /* General Page Styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    /* Form Styling */
+    .form-container {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #282828;
+      color: white;
+    }
+
+    input:focus {
+      outline: 2px solid #ffcc00;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ffcc00;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e6b800;
+    }
+
+    /* Navigation Links */
+    .nav-links {
+      margin-top: 20px;
+    }
+
+    .nav-links a {
+      color: #ffcc00;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Save a YouTube Video</h1>
+
+  <div class="form-container">
+    <form name="video-form" method="POST" data-netlify="true">
+      <label for="videoUrl">Enter YouTube URL:</label>
+      <input type="text" id="videoUrl" name="videoUrl" placeholder="Paste YouTube URL here" required />
+      <p class="error-message" id="error-message">❌ Please enter a valid YouTube URL.</p>
+      <button type="submit">Save Video</button>
+    </form>
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Go to Main Page</a> | <a href="retrieve.html">View Saved Videos</a>
+  </div>
+
+  <script>
+    const form = document.querySelector('form');
+    const input = document.getElementById('videoUrl');
+    const errorMessage = document.getElementById('error-message');
+
+    function isValidYouTubeUrl(url) {
+      try {
+        const parsedUrl = new URL(url);
+        return (
+          parsedUrl.hostname.includes('youtube.com') && parsedUrl.searchParams.has('v') ||
+          parsedUrl.hostname.includes('youtu.be')
+        );
+      } catch (error) {
+        return false;
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      if (!isValidYouTubeUrl(input.value)) {
+        e.preventDefault();
+        errorMessage.style.display = 'block';
+      } else {
+        errorMessage.style.display = 'none';
+      }
     });
   </script>
 </body>
