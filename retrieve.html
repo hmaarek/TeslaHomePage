@@ -53,6 +53,11 @@
     })
     .catch(err => console.error('Error deleting video:', err));
   }
+
+  function playVideo(videoUrl) {
+    localStorage.setItem("selectedVideo", videoUrl); // ✅ Store video URL
+    window.location.href = "index.html"; // ✅ Redirect to index.html
+  }
   
     fetch('/.netlify/functions/get-submissions')
       .then(response => response.json())
@@ -71,11 +76,11 @@
                 const title = videoData.items[0]?.snippet?.title || 'Unknown Title';
                 const thumbnail = videoData.items[0]?.snippet?.thumbnails?.medium?.url || '';
   
+                 // <a href="index.html?video=${encodeURIComponent(videoUrl)}" class="video-link">
                 videoList.innerHTML += `
-                  <li class="video-item">
-                    <a href="index.html?video=${encodeURIComponent(videoUrl)}" class="video-link">
+                  <li class="video-item" onclick="playVideo('${videoUrl}')">
                       <img src="${thumbnail}" alt="Thumbnail" class="thumbnail">
-                      <span class="video-title">${title}  ${submissionId} </span>
+                      <span class="video-title">${title}</span>
                     </a>
                     <button class="delete-btn" onclick="deleteVideo('${submissionId}')">❌ Delete</button>
                   </li>`;

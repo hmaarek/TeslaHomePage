@@ -68,28 +68,64 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
-    const urlParams = new URLSearchParams(window.location.search);
-    const ytPath = urlParams.get('v'); // || 'dQw4w9WgXcQ'; // Default video ID
-    console.log("ytPath= ", ytPath);
-    const videoId = getYouTubeVideoId(ytPath);
-    console.log('Video ID: ', videoId);
-    document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
-    //document.getElementById('youtubePlayer').src = `${videoId}?autoplay=1`;
+    // // YouTube Player: User has to get the link from browser URL address - NOT FROM SHARE
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const ytPath = urlParams.get('v'); // || 'dQw4w9WgXcQ'; // Default video ID
+    // console.log("ytPath= ", ytPath);
+    // const videoId = getYouTubeVideoId(ytPath);
+    // console.log('Video ID: ', videoId);
+    // document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
+    // //document.getElementById('youtubePlayer').src = `${videoId}?autoplay=1`;
 
 
-    function getYouTubeVideoId(url) {
-  // Regular expression to match various YouTube URL formats
-  const regExp = /^.*(http:\/\/googleusercontent\.com\/youtube\.com\/2\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
+//     function getYouTubeVideoId(url) {
+//   // Regular expression to match various YouTube URL formats
+//   const regExp = /^.*(http:\/\/googleusercontent\.com\/youtube\.com\/2\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
 
-  const match = url.match(regExp);
+//   const match = url.match(regExp);
 
-  if (match && match[2].length === 11) {
-    return match[2];
-  } else {
-    return null; // Return null if no valid video ID is found
+//   if (match && match[2].length === 11) {
+//     return match[2];
+//   } else {
+//     return null; // Return null if no valid video ID is found
+//   }
+// }
+
+function extractVideoId(url) {
+    try {
+      const parsedUrl = new URL(url);
+      if (parsedUrl.hostname.includes('youtube.com')) {
+        return parsedUrl.searchParams.get('v') || parsedUrl.pathname.split('/').pop();
+      }
+      if (parsedUrl.hostname.includes('youtu.be')) {
+        return parsedUrl.pathname.substring(1);
+      }
+      return null;
+    } catch (error) {
+      console.error('Error extracting video ID:', error);
+      return null;
+    }
   }
-}
+
+  // Load Selected Video
+  function loadVideo() {
+    let videoUrl = localStorage.getItem("selectedVideo"); // ✅ Get stored video URL
+
+    if (videoUrl) {
+      const videoId = extractVideoId(videoUrl);
+
+      if (videoId) {
+        document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      } else {
+        document.getElementById('videoContainer').innerHTML = '<p>Invalid video URL. Please select a valid video.</p>';
+      }
+    } else {
+      document.getElementById('videoContainer').innerHTML = '<p>No video selected. Please choose a video from the list.</p>';
+    }
+  }
+
+  // Load the video when the page loads
+  window.onload = loadVideo;
 
   </script>
 </body>
