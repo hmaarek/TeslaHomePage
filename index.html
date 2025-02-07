@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Clock & YouTube Player</title>
+  <title>Tesla Dash YouTube Player</title>
   <style>
     /* General Page Styling */
     body {
@@ -70,10 +70,10 @@
   </style>
 </head>
 <body>
-  <h1>Digital Clock & YouTube Player</h1>
+  <!-- <h1>Digital Clock & YouTube Player</h1> -->
 
   <!-- Digital Clock Display -->
-  <div id="clock">00:00:00</div>
+  <!-- <div id="clock">00:00:00</div> -->
 
   <!-- YouTube Video Player -->
   <div id="videoContainer">
@@ -89,21 +89,21 @@
   </div>
 
   <script>
-    // Digital Clock Function
-    function updateClock() {
-      const now = new Date();
+    // // Digital Clock Function
+    // function updateClock() {
+    //   const now = new Date();
 
-      const formattedTime = new Intl.DateTimeFormat('default', {
-        hour: '2-digit',
-        minute: '2-digit',
-        //second: '2-digit',
-        hour12: false, // Set to true if you want 12-hour format
-      }).format(now);
+    //   const formattedTime = new Intl.DateTimeFormat('default', {
+    //     hour: '2-digit',
+    //     minute: '2-digit',
+    //     //second: '2-digit',
+    //     hour12: false, // Set to true if you want 12-hour format
+    //   }).format(now);
 
-      document.getElementById('clock').innerText = formattedTime;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    //   document.getElementById('clock').innerText = formattedTime;
+    // }
+    // setInterval(updateClock, 1000);
+    // updateClock();
 
     // Function to Extract YouTube Video ID
     function extractVideoId(url) {
