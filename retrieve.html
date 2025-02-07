@@ -71,6 +71,16 @@
   .delete-btn:hover {
     background-color: #cc0000;
   }
+
+  .nav-links a {
+      color: #ffcc00;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 32px;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
 </style>
 
 <html lang="en">
@@ -81,9 +91,9 @@
 </head>
 <body>
   <h1>Saved Videos</h1>
-  <nav>
+  <div class="nav-links">
     <a href="save.html">Save Videos</a> | <a href="index.html">Go to Main Page</a>
-  </nav>
+  </div>
 
   <ul id="videoList"></ul>
   
